@@ -1,122 +1,86 @@
-# Portafolio de Jair D'Angelo - Realizador Audiovisual
+# Mi Portafolio - Jair D'Angelo
 
-Un portafolio web estático elegante y minimalista para Jair D'Angelo, realizador audiovisual especializado en cortometrajes y videos corporativos.
+Portafolio personal de Jair D'Angelo, realizador audiovisual especializado en crear historias que resuenan.
 
-## 🎬 Características
+## 🎬 Sobre el Proyecto
 
-- **Diseño Minimalista y Elegante**: Interfaz limpia con colores negro, gris y blanco
-- **Responsive**: Optimizado para dispositivos móviles, tablets y desktop
-- **Galería con Lightbox**: Visualización de trabajos con ampliación de imágenes
-- **Reproductor de Videos**: Modal para reproducir videos de YouTube
-- **Botón Directo a WhatsApp**: Contacto rápido con mensaje predefinido
-- **Formulario de Contacto**: Formulario funcional para consultas
-- **Testimonios**: Sección dedicada a comentarios de clientes
-- **Navegación Suave**: Scroll suave entre secciones
+Este es un portafolio web moderno construido con Astro y Tailwind CSS que muestra el trabajo audiovisual de Jair D'Angelo, incluyendo:
 
-## 🛠️ Tecnologías Utilizadas
+- **Dirección de Fotografía**
+- **Edición de Video**
+- **Contenido para Redes Sociales**
+- **Grabación de Eventos**
+- **Post-Producción**
+- **Cortometrajes**
 
-- **Astro**: Framework para sitios web estáticos
-- **Tailwind CSS**: Framework de CSS utility-first
-- **Lightbox.js**: Biblioteca para galería de imágenes
-- **Font Awesome**: Iconos vectoriales
-- **Markdown**: Para contenido dinámico
+## 🚀 Tecnologías Utilizadas
 
-## 📋 Secciones del Portafolio
+- **Astro** - Framework web para sitios estáticos
+- **Tailwind CSS** - Framework de CSS utilitario
+- **Font Awesome** - Iconos
+- **Lightbox2** - Galería de imágenes
 
-1. **Inicio (Hero)**: Presentación personal y llamadas a la acción
-2. **Sobre Mí**: Información biográfica y especialidades
-3. **Servicios**: Lista detallada de servicios ofrecidos
-4. **Galería**: Trabajos fotográficos con filtros por categoría
-5. **Videos**: Proyectos audiovisuales con reproductor embebido
-6. **Testimonios**: Comentarios de clientes satisfechos
-7. **Contacto**: Información de contacto y formulario
+## 📁 Estructura del Proyecto
 
-## 🚀 Instalación y Uso
-
-### Prerrequisitos
-
-- Node.js (versión 16 o superior)
-- npm o yarn
-
-### Instalación
-
-1. Clona el repositorio:
-```bash
-git clone <url-del-repositorio>
-cd jair_prueba
+```
+MiPortafolio/
+├── src/
+│   ├── components/     # Componentes de Astro
+│   ├── layouts/       # Layouts de la aplicación
+│   ├── pages/         # Páginas de la aplicación
+│   └── styles/        # Estilos globales
+├── public/            # Archivos estáticos
+└── .github/           # Configuración de GitHub Actions
 ```
 
-2. Instala las dependencias:
-```bash
-npm install
-```
+## 🛠️ Desarrollo Local
 
-3. Ejecuta el servidor de desarrollo:
-```bash
-npm run dev
-```
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/usuario/MiPortafolio.git
+   cd MiPortafolio
+   ```
 
-4. Abre tu navegador en `http://localhost:4321`
+2. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
 
-### Construcción para Producción
+3. **Ejecutar en modo desarrollo:**
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run build
-```
+4. **Construir para producción:**
+   ```bash
+   npm run build
+   ```
 
-Los archivos generados estarán en la carpeta `dist/`.
+## 🌐 Despliegue
 
-## 📱 Funcionalidades Principales
+Este proyecto está configurado para desplegarse automáticamente en GitHub Pages usando GitHub Actions.
 
-### Contacto Directo
-- **WhatsApp**: Botón flotante con mensaje predefinido
-- **Teléfono**: Llamada directa desde dispositivos móviles
-- **Email**: Enlace directo al cliente de correo
-- **Instagram**: Enlace directo al perfil
+### Configuración de GitHub Pages
 
-### Galería Interactiva
-- Filtros por categoría (Cortometrajes, Corporativo, Eventos, etc.)
-- Lightbox para visualización ampliada
-- Hover effects con información del proyecto
+1. Ve a la configuración de tu repositorio en GitHub
+2. Navega a "Pages" en el menú lateral
+3. En "Source", selecciona "GitHub Actions"
+4. El despliegue se realizará automáticamente cuando hagas push a la rama `main`
 
-### Videos Embebidos
-- Modal para reproducción de videos de YouTube
-- Controles de reproducción
-- Información detallada de cada proyecto
+### Workflow de Despliegue
 
-## 🎨 Personalización
+El archivo `.github/workflows/deploy.yml` contiene la configuración para:
+- Construir el proyecto con Astro
+- Generar archivos estáticos
+- Desplegar en GitHub Pages
 
-### Colores
-El sitio utiliza una paleta minimalista:
-- **Negro**: `#000000` - Elementos principales
-- **Gris**: `#6B7280` - Textos secundarios
-- **Blanco**: `#FFFFFF` - Fondos y textos principales
+## 📞 Contacto
 
-### Contenido
-Para personalizar el contenido, edita los archivos de componentes en `src/components/`:
-- `Hero.astro`: Información personal y lema
-- `About.astro`: Biografía y especialidades
-- `Services.astro`: Lista de servicios
-- `Gallery.astro`: Trabajos fotográficos
-- `Videos.astro`: Proyectos audiovisuales
-- `Testimonials.astro`: Comentarios de clientes
-- `Contact.astro`: Información de contacto
-
-## 📞 Información de Contacto
-
-- **Teléfono/WhatsApp**: +51 960371612
-- **Email**: jairdangelo67@gmail.com
-- **Instagram**: @jair.dangelo
-- **Ubicación**: Lima – Perú
+- **Teléfono:** +51 960371612
+- **Email:** jairdangelo67@gmail.com
+- **Instagram:** @jair.dangelo
+- **Ubicación:** Lima, Perú
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, abre un issue o pull request para sugerencias o mejoras.
-
----
-
-**Desarrollado con ❤️ para Jair D'Angelo**
+Este proyecto es de uso personal para Jair D'Angelo. Todos los derechos reservados.
