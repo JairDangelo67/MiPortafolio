@@ -7,7 +7,8 @@ const videos = [
     description: "Presentación corporativa para empresa de tecnología innovadora. Este proyecto demuestra la capacidad de crear contenido profesional que comunica efectivamente la visión y valores de una empresa.",
     category: "Corporativo",
     videoId: "jWEGc-eD9YI", // YouTube video ID
-    duration: "20:58"
+    duration: "20:58",
+    fallbackImage: "/images/video-placeholder-1.svg" // Imagen local como fallback
   },
   {
     id: 2,
@@ -15,7 +16,8 @@ const videos = [
     description: "Un cortometraje dramático que explora la soledad urbana y las conexiones humanas. Este trabajo muestra la capacidad narrativa y técnica en la dirección cinematográfica.",
     category: "Cortometrajes",
     videoId: "6HylhLyTM0k", // YouTube video ID
-    duration: "08:27"
+    duration: "08:27",
+    fallbackImage: "/images/video-placeholder-2.svg" // Imagen local como fallback
   }
 ];
 ---
@@ -34,15 +36,30 @@ const videos = [
     <div class="grid lg:grid-cols-2 gap-12">
       {videos.map((video) => (
         <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <!-- Video container con thumbnail real de YouTube -->
+          <!-- Video container con thumbnail mejorado -->
           <div class="relative aspect-video bg-gray-900">
-            <!-- Thumbnail de YouTube -->
+            <!-- Thumbnail de YouTube con múltiples fallbacks -->
             <img 
               src={`https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`}
               alt={`Thumbnail de ${video.title}`}
-              class="w-full h-full object-cover"
-              onerror="this.src=`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`"
+              class="w-full h-full object-cover transition-opacity duration-300"
+              loading="lazy"
+              onerror="this.onerror=null; this.src=`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`;"
+              onload="this.style.opacity='1'; this.nextElementSibling.style.display='none';"
+              style="opacity: 0;"
             />
+            
+            <!-- Placeholder mientras carga -->
+            <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+              <div class="text-center space-y-4">
+                <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center animate-pulse">
+                  <i class="fas fa-video text-2xl text-gray-400"></i>
+                </div>
+                <div class="text-gray-400">
+                  <p class="font-medium text-sm">Cargando video...</p>
+                </div>
+              </div>
+            </div>
             
             <!-- Overlay con información -->
             <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
@@ -133,6 +150,44 @@ const videos = [
   const closeModal = document.getElementById('close-modal');
   const videoPlayButtons = document.querySelectorAll('.video-play-btn');
   
+  // Función para manejar errores de carga de imágenes con múltiples fallbacks
+  function handleImageError(img) {
+    const videoId = img.src.match(/vi\/([^\/]+)\//)?.[1];
+    if (videoId) {
+      // Intentar con diferentes calidades de thumbnail
+      const qualities = ['hqdefault', 'mqdefault', 'sddefault', 'default'];
+      let currentIndex = qualities.indexOf(img.src.includes('maxresdefault') ? 'maxresdefault' : 'hqdefault');
+      
+      if (currentIndex < qualities.length - 1) {
+        currentIndex++;
+        img.src = `https://img.youtube.com/vi/${videoId}/${qualities[currentIndex]}.jpg`;
+      } else {
+        // Si todas fallan, mostrar placeholder personalizado
+        img.style.display = 'none';
+        const placeholder = img.nextElementSibling;
+        if (placeholder) {
+          placeholder.style.display = 'flex';
+          placeholder.innerHTML = `
+            <div class="text-center space-y-4">
+              <div class="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-play text-3xl text-white"></i>
+              </div>
+              <div class="text-white">
+                <p class="font-medium text-lg">Video no disponible</p>
+                <p class="text-sm opacity-90">Haz clic para intentar reproducir</p>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+  }
+  
+  // Aplicar manejo de errores a todas las imágenes
+  document.querySelectorAll('img[src*="youtube.com"]').forEach(img => {
+    img.addEventListener('error', () => handleImageError(img));
+  });
+  
   // Abrir modal
   videoPlayButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -140,7 +195,7 @@ const videos = [
       const videoTitle = button.getAttribute('data-video-title');
       
       if (videoIframe) {
-        videoIframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+        videoIframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`);
       }
       
       if (videoModal) {
@@ -175,4 +230,18 @@ const videos = [
       }
     }
   });
+  
+  // Cerrar modal haciendo clic fuera del video
+  if (videoModal) {
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) {
+        videoModal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+        
+        if (videoIframe) {
+          videoIframe.setAttribute('src', '');
+        }
+      }
+    });
+  }
 </script> 
