@@ -1,0 +1,95 @@
+---
+// Servicios ofrecidos
+const services = [
+  {
+    icon: "fas fa-camera",
+    title: "Dirección de Fotografía",
+    description: "Composición visual profesional y dirección técnica para capturar la esencia de cada proyecto.",
+    features: ["Composición avanzada", "Iluminación profesional", "Dirección de cámara"]
+  },
+  {
+    icon: "fas fa-cut",
+    title: "Edición de Video",
+    description: "Post-producción creativa y técnica para dar vida a tus historias visuales.",
+    features: ["Edición narrativa", "Efectos visuales", "Colorización profesional"]
+  },
+  {
+    icon: "fas fa-share-alt",
+    title: "Contenido para Redes Sociales",
+    description: "Creación de contenido optimizado para plataformas digitales y engagement.",
+    features: ["Videos cortos", "Stories y reels", "Contenido viral"]
+  },
+  {
+    icon: "fas fa-calendar-alt",
+    title: "Grabación de Eventos",
+    description: "Cobertura profesional de eventos con calidad cinematográfica.",
+    features: ["Eventos corporativos", "Bodas y celebraciones", "Conferencias"]
+  },
+  {
+    icon: "fas fa-magic",
+    title: "Post-Producción",
+    description: "Procesamiento completo desde la edición hasta la entrega final.",
+    features: ["Corrección de color", "Masterización", "Formatos múltiples"]
+  },
+  {
+    icon: "fas fa-film",
+    title: "Cortometrajes",
+    description: "Desarrollo y producción de cortometrajes con narrativa impactante.",
+    features: ["Guión y storyboard", "Producción completa", "Festivales"]
+  }
+];
+---
+
+<section id="services" class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Servicios</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Ofrezco una gama completa de servicios audiovisuales para llevar tus ideas a la pantalla
+      </p>
+    </div>
+    
+    <!-- Grid de servicios -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {services.map((service) => (
+        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <!-- Icono -->
+          <div class="w-16 h-16 bg-gray-900 rounded-lg flex items-center justify-center mb-6">
+            <i class={`${service.icon} text-2xl text-white`}></i>
+          </div>
+          
+          <!-- Contenido -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-bold text-gray-900">{service.title}</h3>
+            <p class="text-gray-600 leading-relaxed">{service.description}</p>
+            
+            <!-- Características -->
+            <ul class="space-y-2">
+              {service.features.map((feature) => (
+                <li class="flex items-center gap-2 text-sm text-gray-700">
+                  <i class="fas fa-check text-green-500 text-xs"></i>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <!-- CTA -->
+    <div class="text-center mt-16">
+      <p class="text-gray-600 mb-6">
+        ¿Tienes un proyecto en mente? Conversemos sobre cómo puedo ayudarte a hacerlo realidad.
+      </p>
+      <a 
+        href="#contact" 
+        class="inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200"
+      >
+        <i class="fab fa-whatsapp"></i>
+        Consulta Gratuita
+      </a>
+    </div>
+  </div>
+</section> 

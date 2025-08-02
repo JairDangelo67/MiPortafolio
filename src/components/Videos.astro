@@ -1,0 +1,178 @@
+---
+// Videos de Jair D'Angelo
+const videos = [
+  {
+    id: 1,
+    title: "MORTEM",
+    description: "Presentación corporativa para empresa de tecnología innovadora. Este proyecto demuestra la capacidad de crear contenido profesional que comunica efectivamente la visión y valores de una empresa.",
+    category: "Corporativo",
+    videoId: "jWEGc-eD9YI", // YouTube video ID
+    duration: "20:58"
+  },
+  {
+    id: 2,
+    title: "Cortometraje - 'EN MI CABEZA'",
+    description: "Un cortometraje dramático que explora la soledad urbana y las conexiones humanas. Este trabajo muestra la capacidad narrativa y técnica en la dirección cinematográfica.",
+    category: "Cortometrajes",
+    videoId: "6HylhLyTM0k", // YouTube video ID
+    duration: "08:27"
+  }
+];
+---
+
+<section id="videos" class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Videos</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Una selección de mis trabajos audiovisuales más representativos
+      </p>
+    </div>
+    
+    <!-- Grid de videos -->
+    <div class="grid lg:grid-cols-2 gap-12">
+      {videos.map((video) => (
+        <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <!-- Video container con thumbnail real de YouTube -->
+          <div class="relative aspect-video bg-gray-900">
+            <!-- Thumbnail de YouTube -->
+            <img 
+              src={`https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`}
+              alt={`Thumbnail de ${video.title}`}
+              class="w-full h-full object-cover"
+              onerror="this.src=`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`"
+            />
+            
+            <!-- Overlay con información -->
+            <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+              <div class="text-center space-y-4">
+                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <i class="fas fa-play text-3xl text-white"></i>
+                </div>
+                <div class="text-white">
+                  <p class="font-medium text-lg">{video.title}</p>
+                  <p class="text-sm opacity-90">{video.duration}</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Overlay para reproducir -->
+            <button 
+              class="video-play-btn absolute inset-0 w-full h-full flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300"
+              data-video-id={video.videoId}
+              data-video-title={video.title}
+            >
+              <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors duration-200">
+                <i class="fas fa-play text-xl text-white ml-1"></i>
+              </div>
+            </button>
+          </div>
+          
+          <!-- Información del video -->
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
+                {video.category}
+              </span>
+              <span class="text-sm text-gray-500">{video.duration}</span>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-2">{video.title}</h3>
+            <p class="text-gray-600 leading-relaxed">{video.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <!-- CTA -->
+    <div class="text-center mt-16">
+      <p class="text-gray-600 mb-6">
+        ¿Quieres ver más contenido? Cada video cuenta una historia única.
+      </p>
+      <a 
+        href="#contact" 
+        class="inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200"
+      >
+        <i class="fas fa-video"></i>
+        Solicitar Video Personalizado
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Modal para reproducir videos -->
+<div id="video-modal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden">
+  <div class="absolute inset-0 flex items-center justify-center p-4">
+    <div class="relative w-full max-w-4xl">
+      <!-- Botón cerrar -->
+      <button 
+        id="close-modal"
+        class="absolute -top-12 right-0 text-white text-2xl hover:text-gray-300 transition-colors"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <!-- Contenedor del video -->
+      <div class="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+        <iframe 
+          id="video-iframe"
+          class="w-full h-full"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Funcionalidad del modal de video
+  const videoModal = document.getElementById('video-modal');
+  const videoIframe = document.getElementById('video-iframe');
+  const closeModal = document.getElementById('close-modal');
+  const videoPlayButtons = document.querySelectorAll('.video-play-btn');
+  
+  // Abrir modal
+  videoPlayButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const videoId = button.getAttribute('data-video-id');
+      const videoTitle = button.getAttribute('data-video-title');
+      
+      if (videoIframe) {
+        videoIframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+      }
+      
+      if (videoModal) {
+        videoModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+  
+  // Cerrar modal
+  if (closeModal) {
+    closeModal.addEventListener('click', () => {
+      if (videoModal) {
+        videoModal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+      
+      if (videoIframe) {
+        videoIframe.setAttribute('src', '');
+      }
+    });
+  }
+  
+  // Cerrar modal con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal && !videoModal.classList.contains('hidden')) {
+      videoModal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+      
+      if (videoIframe) {
+        videoIframe.setAttribute('src', '');
+      }
+    }
+  });
+</script> 

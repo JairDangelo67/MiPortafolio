@@ -1,0 +1,127 @@
+---
+// Información de contacto para el footer
+const contactInfo = {
+  phone: "960371612",
+  email: "jairdangelo67@gmail.com",
+  instagram: "jair.dangelo",
+  location: "Lima – Perú"
+};
+
+// Enlaces de navegación
+const navLinks = [
+  { href: "#home", label: "Inicio" },
+  { href: "#about", label: "Sobre Mí" },
+  { href: "#services", label: "Servicios" },
+  { href: "#gallery", label: "Galería" },
+  { href: "#videos", label: "Videos" },
+  { href: "#testimonials", label: "Testimonios" },
+  { href: "#contact", label: "Contacto" }
+];
+
+// Redes sociales
+const socialLinks = [
+  { 
+    name: "Instagram", 
+    url: `https://instagram.com/${contactInfo.instagram}`, 
+    icon: "fab fa-instagram" 
+  },
+  { 
+    name: "WhatsApp", 
+    url: `https://wa.me/51960371612?text=Hola Jair, me interesa tu trabajo audiovisual.`, 
+    icon: "fab fa-whatsapp" 
+  },
+  { 
+    name: "Email", 
+    url: `mailto:${contactInfo.email}`, 
+    icon: "fas fa-envelope" 
+  }
+];
+---
+
+<footer class="bg-gray-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid md:grid-cols-4 gap-8">
+      <!-- Información principal -->
+      <div class="md:col-span-2">
+        <h3 class="text-2xl font-bold mb-4">Jair D'Angelo</h3>
+        <p class="text-gray-300 mb-6 leading-relaxed">
+          Realizador audiovisual especializado en crear historias que resuenan. 
+          Transformando ideas en narrativas visuales cautivadoras desde Lima, Perú.
+        </p>
+        
+        <!-- Información de contacto -->
+        <div class="space-y-2 text-sm text-gray-300">
+          <p><i class="fas fa-phone mr-2"></i>+51 {contactInfo.phone}</p>
+          <p><i class="fas fa-envelope mr-2"></i>{contactInfo.email}</p>
+          <p><i class="fas fa-map-marker-alt mr-2"></i>{contactInfo.location}</p>
+        </div>
+      </div>
+      
+      <!-- Enlaces rápidos -->
+      <div>
+        <h4 class="text-lg font-semibold mb-4">Enlaces Rápidos</h4>
+        <ul class="space-y-2">
+          {navLinks.map((link) => (
+            <li>
+              <a 
+                href={link.href} 
+                class="text-gray-300 hover:text-white transition-colors duration-200"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      <!-- Servicios -->
+      <div>
+        <h4 class="text-lg font-semibold mb-4">Servicios</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li>Dirección de Fotografía</li>
+          <li>Edición de Video</li>
+          <li>Contenido Social</li>
+          <li>Grabación de Eventos</li>
+          <li>Post-Producción</li>
+          <li>Cortometrajes</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Separador -->
+    <div class="border-t border-gray-800 mt-8 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <!-- Copyright -->
+        <div class="text-gray-400 text-sm mb-4 md:mb-0">
+          <p>&copy; 2024 Jair D'Angelo. Todos los derechos reservados.</p>
+        </div>
+        
+        <!-- Redes sociales -->
+        <div class="flex space-x-4">
+          {socialLinks.map((social) => (
+            <a 
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 transition-colors duration-200"
+              title={social.name}
+            >
+              <i class={social.icon}></i>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Botón flotante de WhatsApp -->
+  <a 
+    href={`https://wa.me/51960371612?text=Hola Jair, me interesa tu trabajo audiovisual. ¿Podemos conversar sobre mi proyecto?`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="fixed bottom-6 right-6 w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-green-700 transition-colors duration-200 z-50"
+    title="Chatear por WhatsApp"
+  >
+    <i class="fab fa-whatsapp text-2xl"></i>
+  </a>
+</footer> 

@@ -1,0 +1,84 @@
+---
+// Datos de contacto
+const contactInfo = {
+  phone: "960371612",
+  email: "jairdangelo67@gmail.com",
+  instagram: "jair.dangelo",
+  location: "Lima – Perú"
+};
+---
+
+<section id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="space-y-8">
+      <!-- Nombre y título -->
+      <div class="space-y-4">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight">
+          Jair D'Angelo
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 font-light">
+          Realizador Audiovisual
+        </p>
+      </div>
+      
+      <!-- Descripción -->
+      <div class="max-w-3xl mx-auto">
+        <p class="text-lg md:text-xl text-gray-300 leading-relaxed">
+          Realizador audiovisual con experiencia en la creación de contenidos impactantes, 
+          especializado en cortometrajes y videos corporativos. Mi pasión es transformar 
+          ideas en narrativas visuales cautivadoras.
+        </p>
+      </div>
+      
+      <!-- Lema -->
+      <div class="py-4">
+        <p class="text-2xl md:text-3xl font-light italic text-gray-200">
+          "Creando historias que resuenan"
+        </p>
+      </div>
+      
+      <!-- Botones de acción -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a 
+          href="#contact" 
+          class="bg-white text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-200"
+        >
+          Contáctame
+        </a>
+        <a 
+          href="#gallery" 
+          class="border border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-gray-900 transition-colors duration-200"
+        >
+          Ver Trabajos
+        </a>
+      </div>
+      
+      <!-- Información de contacto rápida -->
+      <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+        <a href={`tel:${contactInfo.phone}`} class="flex items-center gap-2 hover:text-white transition-colors">
+          <i class="fas fa-phone"></i>
+          <span>{contactInfo.phone}</span>
+        </a>
+        <a href={`mailto:${contactInfo.email}`} class="flex items-center gap-2 hover:text-white transition-colors">
+          <i class="fas fa-envelope"></i>
+          <span>{contactInfo.email}</span>
+        </a>
+        <a href={`https://instagram.com/${contactInfo.instagram}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-white transition-colors">
+          <i class="fab fa-instagram"></i>
+          <span>@{contactInfo.instagram}</span>
+        </a>
+        <span class="flex items-center gap-2">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>{contactInfo.location}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+    <div class="animate-bounce">
+      <i class="fas fa-chevron-down text-white text-2xl"></i>
+    </div>
+  </div>
+</section> 
