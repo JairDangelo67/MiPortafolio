@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrusel de Personajes - Clash Royale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .carousel-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 600px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel {
+            display: flex;
+            height: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        .character-info {
+            flex: 1;
+            padding: 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+            transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+        }
+
+        .character-info.fade-out {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .character-info.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .logo span {
+            font-size: 12px;
+            color: #ccc;
+            display: block;
+        }
+
+        .character-name {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .character-description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .stat-icon {
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #000;
+        }
+
+        .level-indicator {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-dots {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .level-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+
+        .level-dot.active {
+            background: #ffd700;
+        }
+
+        .level-diamond {
+            width: 40px;
+            height: 40px;
+            background: #ffd700;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            transform: rotate(45deg);
+        }
+
+        .level-diamond span {
+            transform: rotate(-45deg);
+        }
+
+        .more-details-btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .more-details-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .character-visual {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-card {
+            width: 300px;
+            height: 400px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transition: all 1.2s ease-in-out;
+        }
+
+        .character-card:hover {
+            transform: scale(1.05);
+        }
+
+        .character-card.active {
+            transform: scale(1.1);
+            z-index: 3;
+        }
+
+        .character-card.inactive {
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transform: scale(0.9);
+        }
+
+        .character-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: all 1.2s ease-in-out;
+        }
+
+        .character-cards-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            position: relative;
+        }
+
+        .navigation-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #ffd700;
+            transform: scale(1.2);
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .character-card {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .character-card:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .character-card:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-container {
+                width: 95%;
+                height: 500px;
+            }
+
+            .character-info {
+                padding: 20px;
+            }
+
+            .character-name {
+                font-size: 32px;
+            }
+
+            .character-card {
+                width: 200px;
+                height: 300px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container">
+        <div class="background-pattern"></div>
+        
+        <div class="carousel">
+            <div class="carousel-slide">
+                <div class="character-info fade-in">
+                    <div class="logo">
+                        CLASH
+                        <span>SUPERCELL</span>
+                    </div>
+                    
+                    <div class="level-indicator">
+                        <div class="level-dots">
+                            <div class="level-dot"></div>
+                            <div class="level-dot"></div>
+                            <div class="level-dot active"></div>
+                        </div>
+                        <div class="level-diamond">
+                            <span>3</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h1 class="character-name">Baby Dragon</h1>
+                        <p class="character-description">
+                            Cuando no está cerca de otras unidades aéreas, los Baby Dragons se enfurecen y obtienen daño adicional y velocidad de ataque mejorada.
+                        </p>
+                        
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <div class="stat-icon">🎯</div>
+                                <span>Objetivo Preferido: Ninguno</span>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">🏃</div>
+                                <span>Velocidad: 20</span>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">⏰</div>
+                                <span>Tiempo Entrenamiento: 5s/8s</span>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">🏠</div>
+                                <span>Espacio Vivienda: 10</span>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">⚔️</div>
+                                <span>Velocidad Ataque: 1s</span>
+                            </div>
+                        </div>
+
+                        <button class="more-details-btn">Más Detalles</button>
+                    </div>
+                </div>
+
+                <div class="character-visual">
+                    <div class="character-cards-container">
+                        <div class="character-card inactive" data-character="baby-dragon-prev">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNjY2Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiM5OTkiLz4KPHBhdGggZD0iTTE1MCAxNDBMMTgwIDE4MEwxNTAgMjAwTDEyMCAxODBMMTUwIDE0MFoiIGZpbGw9IiM3NzkiLz4KPC9zdmc+" alt="Character Previous" class="character-image">
+                        </div>
+                        <div class="character-card active" data-character="baby-dragon-current">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNGNhZjUwIi8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiM4YmNhM2EiLz4KPHBhdGggZD0iTTE1MCAxNDBMMTgwIDE4MEwxNTAgMjAwTDEyMCAxODBMMTUwIDE0MFoiIGZpbGw9IiM2N2NiM2EiLz4KPGNpcmNsZSBjeD0iMTMwIiBjeT0iODAiIHI9IjUiIGZpbGw9IiNmZmYiLz4KPGNpcmNsZSBjeD0iMTcwIiBjeT0iODAiIHI9IjUiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1MCAxNzBMMTgwIDE5MEwxNTAgMjEwTDEyMCAxOTBMMTUwIDE3MFoiIGZpbGw9IiM0Y2FmNTAiLz4KPC9zdmc+" alt="Baby Dragon" class="character-image">
+                        </div>
+                        <div class="character-card inactive" data-character="baby-dragon-next">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNjc0ZWE3Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNjAiIGZpbGw9IiNhOGJjYjQiLz4KPHBhdGggZD0iTTE1MCAxNjBMMTgwIDIwMEwxNTAgMjIwTDEyMCAyMDBMMTUwIDE2MFoiIGZpbGw9IiM5MGE5YjQiLz4KPGNpcmNsZSBjeD0iMTMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPGNpcmNsZSBjeD0iMTcwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1MCAxODBMMTgwIDIyMEwxNTAgMjQwTDEyMCAyMjBMMTUwIDE4MFoiIGZpbGw9IiM2NzRlYTciLz4KPC9zdmc+" alt="Yeti" class="character-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-controls">
+            <button class="control-btn prev-btn">‹</button>
+            <button class="control-btn next-btn">›</button>
+        </div>
+
+        <div class="navigation-dots">
+            <div class="nav-dot active" data-slide="0"></div>
+            <div class="nav-dot" data-slide="1"></div>
+            <div class="nav-dot" data-slide="2"></div>
+        </div>
+    </div>
+
+    <script>
+        class Carousel {
+            constructor() {
+                this.currentSlide = 0;
+                this.isTransitioning = false;
+                this.dots = document.querySelectorAll('.nav-dot');
+                this.prevBtn = document.querySelector('.prev-btn');
+                this.nextBtn = document.querySelector('.next-btn');
+                this.characterInfo = document.querySelector('.character-info');
+                this.cards = document.querySelectorAll('.character-card');
+                
+                // Datos de los personajes
+                this.characters = [
+                    {
+                        name: "Baby Dragon",
+                        description: "Cuando no está cerca de otras unidades aéreas, los Baby Dragons se enfurecen y obtienen daño adicional y velocidad de ataque mejorada.",
+                        stats: [
+                            { icon: "🎯", label: "Objetivo Preferido: Ninguno" },
+                            { icon: "🏃", label: "Velocidad: 20" },
+                            { icon: "⏰", label: "Tiempo Entrenamiento: 5s/8s" },
+                            { icon: "🏠", label: "Espacio Vivienda: 10" },
+                            { icon: "⚔️", label: "Velocidad Ataque: 1s" }
+                        ],
+                        level: 3,
+                        levelDot: 2,
+                        images: {
+                            prev: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNjY2Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiM5OTkiLz4KPHBhdGggZD0iTTE1MCAxNDBMMTgwIDE4MEwxNTAgMjAwTDEyMCAxODBMMTUwIDE0MFoiIGZpbGw9IiM3NzkiLz4KPC9zdmc+",
+                            current: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNGNhZjUwIi8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiM4YmNhM2EiLz4KPHBhdGggZD0iTTE1MCAxNDBMMTgwIDE4MEwxNTAgMjAwTDEyMCAxODBMMTUwIDE0MFoiIGZpbGw9IiM2N2NiM2EiLz4KPGNpcmNsZSBjeD0iMTMwIiBjeT0iODAiIHI9IjUiIGZpbGw9IiNmZmYiLz4KPGNpcmNsZSBjeD0iMTcwIiBjeT0iODAiIHI9IjUiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1MCAxNzBMMTgwIDE5MEwxNTAgMjEwTDEyMCAxOTBMMTUwIDE3MFoiIGZpbGw9IiM0Y2FmNTAiLz4KPC9zdmc+",
+                            next: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNjc0ZWE3Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNjAiIGZpbGw9IiNhOGJjYjQiLz4KPHBhdGggZD0iTTE1MCAxNjBMMTgwIDIwMEwxNTAgMjIwTDEyMCAyMDBMMTUwIDE2MFoiIGZpbGw9IiM5MGE5YjQiLz4KPGNpcmNsZSBjeD0iMTMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPGNpcmNsZSBjeD0iMTcwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1MCAxODBMMTgwIDIyMEwxNTAgMjQwTDEyMCAyMjBMMTUwIDE4MFoiIGZpbGw9IiM2NzRlYTciLz4KPC9zdmc+"
+                        }
+                    },
+                    {
+                        name: "Yeti",
+                        description: "El pesado compañero peludo ama el clima frío y sus amigos Yetimites. Si lo lastimas, harás que los Yetimites se enojen de verdad.",
+                        stats: [
+                            { icon: "🎯", label: "Objetivo Preferido: Cualquiera" },
+                            { icon: "🏠", label: "Espacio Vivienda: 18" },
+                            { icon: "🏃", label: "Velocidad: 12" },
+                            { icon: "⚡", label: "Velocidad Ataque: 1s" },
+                            { icon: "⏰", label: "Tiempo Entrenamiento: 3m" }
+                        ],
+                        level: 4,
+                        levelDot: 3,
+                        images: {
+                            prev: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNGNhZjUwIi8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiM4YmNhM2EiLz4KPHBhdGggZD0iTTE1MCAxNDBMMTgwIDE4MEwxNTAgMjAwTDEyMCAxODBMMTUwIDE0MFoiIGZpbGw9IiM2N2NiM2EiLz4KPGNpcmNsZSBjeD0iMTMwIiBjeT0iODAiIHI9IjUiIGZpbGw9IiNmZmYiLz4KPGNpcmNsZSBjeD0iMTcwIiBjeT0iODAiIHI9IjUiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1MCAxNzBMMTgwIDE5MEwxNTAgMjEwTDEyMCAxOTBMMTUwIDE3MFoiIGZpbGw9IiM0Y2FmNTAiLz4KPC9zdmc+",
+                            current: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNjc0ZWE3Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNjAiIGZpbGw9IiNhOGJjYjQiLz4KPHBhdGggZD0iTTE1MCAxNjBMMTgwIDIwMEwxNTAgMjIwTDEyMCAyMDBMMTUwIDE2MFoiIGZpbGw9IiM5MGE5YjQiLz4KPGNpcmNsZSBjeD0iMTMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPGNpcmNsZSBjeD0iMTcwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1MCAxODBMMTgwIDIyMEwxNTAgMjQwTDEyMCAyMjBMMTUwIDE4MFoiIGZpbGw9IiM2NzRlYTciLz4KPC9zdmc+"
+                        }
+                    },
+                    {
+                        name: "Head Hunter",
+                        description: "Es lo suficientemente ligera para saltar sobre muros y sus armas envenenadas hacen que sus objetivos se muevan y ataquen más lento.",
+                        stats: [
+                            { icon: "🎯", label: "Objetivo Preferido: Héroes" },
+                            { icon: "🏠", label: "Espacio Vivienda: 6" },
+                            { icon: "🏃", label: "Velocidad: 32" },
+                            { icon: "⚔️", label: "Velocidad Ataque: 0.4s" },
+                            { icon: "⏰", label: "Tiempo Entrenamiento: 1m" }
+                        ],
+                        level: 5,
+                        levelDot: 4,
+                        images: {
+                            prev: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNjc0ZWE3Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNjAiIGZpbGw9IiNhOGJjYjQiLz4KPHBhdGggZD0iTTE1MCAxNjBMMTgwIDIwMEwxNTAgMjIwTDEyMCAyMDBMMTUwIDE2MFoiIGZpbGw9IiM5MGE5YjQiLz4KPGNpcmNsZSBjeD0iMTMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPGNpcmNsZSBjeD0iMTcwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTE1MCAxODBMMTgwIDIyMEwxNTAgMjQwTDEyMCAyMjBMMTUwIDE4MFoiIGZpbGw9IiM2NzRlYTciLz4KPC9zdmc+"
+                        }
+                    }
+                ];
+                
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateContent();
+                this.startAutoPlay();
+            }
+
+            bindEvents() {
+                this.prevBtn.addEventListener('click', () => this.prevSlide());
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+                
+                this.dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => this.goToSlide(index));
+                });
+
+                // Touch events for mobile
+                let startX = 0;
+                let endX = 0;
+
+                document.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+
+                document.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    this.handleSwipe();
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+            }
+
+            handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = startX - endX;
+
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        this.nextSlide();
+                    } else {
+                        this.prevSlide();
+                    }
+                }
+            }
+
+            goToSlide(index) {
+                if (this.isTransitioning) return;
+                this.currentSlide = index;
+                this.updateContent();
+            }
+
+            nextSlide() {
+                if (this.isTransitioning) return;
+                this.currentSlide = (this.currentSlide + 1) % this.characters.length;
+                this.updateContent();
+            }
+
+            prevSlide() {
+                if (this.isTransitioning) return;
+                this.currentSlide = this.currentSlide === 0 ? this.characters.length - 1 : this.currentSlide - 1;
+                this.updateContent();
+            }
+
+            updateContent() {
+                if (this.isTransitioning) return;
+                this.isTransitioning = true;
+
+                const character = this.characters[this.currentSlide];
+                
+                // Fade out current content
+                this.characterInfo.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    // Update character information
+                    this.updateCharacterInfo(character);
+                    
+                    // Update character images
+                    this.updateCharacterImages(character);
+                    
+                    // Update dots
+                    this.updateDots();
+                    
+                    // Fade in new content
+                    this.characterInfo.classList.remove('fade-out');
+                    this.characterInfo.classList.add('fade-in');
+                    
+                    setTimeout(() => {
+                        this.characterInfo.classList.remove('fade-in');
+                        this.isTransitioning = false;
+                    }, 1200);
+                }, 600);
+            }
+
+            updateCharacterInfo(character) {
+                const nameElement = this.characterInfo.querySelector('.character-name');
+                const descriptionElement = this.characterInfo.querySelector('.character-description');
+                const statsContainer = this.characterInfo.querySelector('.stats-container');
+                const levelDiamond = this.characterInfo.querySelector('.level-diamond span');
+                const levelDots = this.characterInfo.querySelectorAll('.level-dot');
+
+                // Update name and description
+                nameElement.textContent = character.name;
+                descriptionElement.textContent = character.description;
+
+                // Update stats
+                statsContainer.innerHTML = '';
+                character.stats.forEach(stat => {
+                    const statItem = document.createElement('div');
+                    statItem.className = 'stat-item';
+                    statItem.innerHTML = `
+                        <div class="stat-icon">${stat.icon}</div>
+                        <span>${stat.label}</span>
+                    `;
+                    statsContainer.appendChild(statItem);
+                });
+
+                // Update level
+                levelDiamond.textContent = character.level;
+                
+                // Update level dots
+                levelDots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === character.levelDot);
+                });
+            }
+
+            updateCharacterImages(character) {
+                const prevCard = this.cards[0];
+                const currentCard = this.cards[1];
+                const nextCard = this.cards[2];
+
+                // Update images with transition
+                prevCard.querySelector('.character-image').src = character.images.prev;
+                currentCard.querySelector('.character-image').src = character.images.current;
+                nextCard.querySelector('.character-image').src = character.images.next;
+            }
+
+            updateDots() {
+                this.dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentSlide);
+                });
+            }
+
+            startAutoPlay() {
+                setInterval(() => {
+                    this.nextSlide();
+                }, 8000); // Change slide every 8 seconds (more time to read)
+            }
+        }
+
+        // Initialize carousel when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new Carousel();
+        });
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.character-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    if (!card.classList.contains('inactive')) {
+                        card.style.transform = 'scale(1.1) rotate(2deg)';
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                });
+            });
+
+            // Add click effect to buttons
+            const buttons = document.querySelectorAll('.more-details-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    button.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        button.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

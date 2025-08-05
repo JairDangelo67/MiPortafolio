@@ -56,8 +56,15 @@ const bio = {
       
       <!-- Imagen/Ilustración -->
       <div class="relative">
-        <div class="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center">
-          <div class="text-center space-y-4">
+        <div class="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center overflow-hidden">
+          <img 
+            src="/MiPortafolio/Yo.jpg" 
+            alt="Realizador audiovisual" 
+            class="w-full h-full object-cover rounded-2xl"
+            loading="eager"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="text-center space-y-4" style="display: none;">
             <i class="fas fa-video text-6xl text-gray-400"></i>
             <p class="text-gray-500 font-medium">Imagen del realizador</p>
             <p class="text-sm text-gray-400">(Espacio para foto profesional)</p>
